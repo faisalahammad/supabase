@@ -5,6 +5,8 @@ import { useFlag } from 'hooks'
 
 export const generateDatabaseMenu = (project?: Project): ProductMenuGroup[] => {
   const ref = project?.ref ?? 'default'
+  const logsPgbouncer = useFlag('logsPgbouncer')
+  const logsPostgrest = useFlag('logsPostgrest')
   const productReports = useFlag('productReports')
 
   const HOOKS_RELEASED = '2021-07-30T15:33:54.383Z'
@@ -38,71 +40,91 @@ export const generateDatabaseMenu = (project?: Project): ProductMenuGroup[] => {
     },
     ...(IS_PLATFORM
       ? [
-          {
-            title: 'Logs and Usage',
-            items: [
-              {
-                name: 'API logs',
-                key: 'api-logs',
-                url: `/project/${ref}/database/api-logs`,
-                items: [],
-              },
-              ...(productReports
-                ? [
-                    {
-                      name: 'API usage',
-                      key: 'api-usage',
-                      url: `/project/${ref}/database/api-usage`,
-                      items: [],
-                    },
-                  ]
-                : []),
-              {
-                name: 'Postgres logs',
-                key: 'postgres-logs',
-                url: `/project/${ref}/database/postgres-logs`,
-                items: [],
-              },
-              {
-                name: 'Realtime logs',
-                key: 'realtime-logs',
-                url: `/project/${ref}/database/realtime-logs`,
-                items: [],
-              },
-            ],
-          },
-        ]
+        {
+          title: 'Logs and Usage',
+          items: [
+            {
+              name: 'API logs',
+              key: 'api-logs',
+              url: `/project/${ref}/database/api-logs`,
+              items: [],
+            },
+            ...(productReports
+              ? [
+                {
+                  name: 'API usage',
+                  key: 'api-usage',
+                  url: `/project/${ref}/database/api-usage`,
+                  items: [],
+                },
+              ]
+              : []),
+            {
+              name: 'Postgres logs',
+              key: 'postgres-logs',
+              url: `/project/${ref}/database/postgres-logs`,
+              items: [],
+            },
+            {
+              name: 'Realtime logs',
+              key: 'realtime-logs',
+              url: `/project/${ref}/database/realtime-logs`,
+              items: [],
+            },
+            ...(logsPostgrest
+              ? [
+                {
+                  name: 'PostgREST logs',
+                  key: 'postgrest-logs',
+                  url: `/project/${ref}/database/postgrest-logs`,
+                  items: [],
+                },
+              ]
+              : []),
+            ...(logsPgbouncer
+              ? [
+                {
+                  name: 'PgBouncer logs',
+                  key: 'pgbouncer-logs',
+                  url: `/project/${ref}/database/pgbouncer-logs`,
+                  items: [],
+                },
+              ]
+              : []),
+          ],
+        },
+      ]
       : []),
     ...(IS_PLATFORM
       ? [
-          {
-            title: 'Alpha Preview',
-            items: [
-              {
-                name: 'Database Triggers',
-                key: 'triggers',
-                url: `/project/${ref}/database/triggers`,
-                items: [],
-              },
-              {
-                name: 'Database Functions',
-                key: 'functions',
-                url: `/project/${ref}/database/functions`,
-                items: [],
-              },
-              ...(showHooksRoute
-                ? [
-                    {
-                      name: 'Database Webhooks',
-                      key: 'hooks',
-                      url: `/project/${ref}/database/hooks`,
-                      items: [],
-                    },
-                  ]
-                : []),
-            ],
-          },
-        ]
+        {
+          title: 'Alpha Preview',
+          items: [
+            {
+              name: 'Database Triggers',
+              key: 'triggers',
+              url: `/project/${ref}/database/triggers`,
+              items: [],
+            },
+            {
+              name: 'Database Functions',
+              key: 'functions',
+              url: `/project/${ref}/database/functions`,
+              items: [],
+            },
+            ...(showHooksRoute
+              ? [
+                {
+                  name: 'Database Webhooks',
+                  key: 'hooks',
+                  url: `/project/${ref}/database/hooks`,
+                  items: [],
+                },
+              ]
+              : []),
+          ],
+        },
+      ]
       : []),
   ]
 }
